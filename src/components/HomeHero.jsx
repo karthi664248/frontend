@@ -70,82 +70,85 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                     )}
                   </div>
                   <div className="absolute bottom-4 left-4 right-0 sm:left-8 flex flex-col gap-1 xs:gap-2 text-secondaryTextColor w-[90%] md:w-2/3 lg:w-1/2 before:content-[''] before:absolute before:-inset-4 before:-left-4 before:sm:-left-8 before:-bottom-4 before:bg-white/40 dark:before:bg-transparent before:backdrop-blur-md dark:before:backdrop-blur-none before:z-[-1] before:mask">
+                    {/* Title */}
                     {movie.title && (
                       <h1 className="line-clamp-1 w-[90%] text-xl sm:text-3xl md:text-4xl font-extrabold text-primaryTextColor">
                         {movie.title}
                       </h1>
                     )}
-                    <div className="flex items-center gap-2 -mt-2 flex-wrap">
+
+                    {/* Year • Type • Rip • Rating */}
+                    <div className="flex items-center gap-2 flex-wrap">
                       {movie.release_year && (
                         <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
                           📅 {movie.release_year}
                         </p>
                       )}
-                      <span>•</span>
+                      <span className="text-white/40">•</span>
                       <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                        🌐 {movie.languages
-                          .map(
-                            (lang) =>
-                              lang.charAt(0).toUpperCase() + lang.slice(1)
-                          )
-                          .join(", ")}{" "}
+                        {movie.media_type === "tv" || movie.media_type === "tvshow" || movie.media_type === "series"
+                          ? "📺 Series"
+                          : "🎥 Movie"}
                       </p>
                       {movie.rip && (
                         <>
-                          <span>•</span>
+                          <span className="text-white/40">•</span>
                           <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                            🎬 {movie.rip}
+                            🎞️ {movie.rip}
                           </p>
                         </>
                       )}
                       {movie.rating && (
                         <>
-                          <span>•</span>
+                          <span className="text-white/40">•</span>
                           <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
                             ⭐ {(parseFloat(movie.rating) || 0).toFixed(1)}
                           </p>
                         </>
                       )}
                     </div>
-                    <div className="flex-col gap-2 text-sm flex">
-                      <div className="flex items-center gap-1 capitalize flex-wrap">
+
+                    {/* Genres */}
+                    {movie.genres?.length > 0 && (
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <span className="text-[0.6rem] lg:text-[0.7rem]">🎭</span>
                         {movie.genres.slice(0, 3).map((genreId, index) => (
                           <div
-                            className="text-[0.6rem] py-0.5 px-2.5 border border-white/30 text-white/80 rounded-full sm:text-sm"
+                            className="text-[0.6rem] py-0.5 px-2.5 border border-white/30 text-white/80 rounded-full sm:text-sm capitalize"
                             key={index}
                           >
                             {genreId}
                           </div>
                         ))}
                       </div>
-                    </div>
+                    )}
 
-                    {movie.description && (
-                      <p className="font-extralight line-clamp-1 w-[80%] text-xs sm:line-clamp-2 sm:text-sm md:text-md">
-                        {movie.description}
+                    {/* Languages */}
+                    {movie.languages?.length > 0 && (
+                      <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                        🌐 {movie.languages
+                          .map((lang) => lang.charAt(0).toUpperCase() + lang.slice(1))
+                          .join(", ")}
                       </p>
                     )}
-                    <div className=" flex items-center gap-2 mt-2 ">
-                      <div className="flex items-center gap-3 flex-wrap ">
-                        <Link
-                          className="flex items-center gap-2 bg-white/10 border border-white/30 text-white text-sm py-1 px-5 rounded-full sm:text-base transition-all duration-300 ease-in-out hover:bg-white/20"
-                          to={movie.media_type === "tv" || movie.media_type === "tvshow" || movie.media_type === "series"
-                            ? `/ser/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}` 
-                            : `/mov/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <FaPlay />
-                          Watch
-                        </Link>
-                      </div>
 
-                      {/* Mobile rating */}
-                      <div className="flex items-center gap-1 bg-black/60 text-white text-[0.65rem] sm:text-xs py-1 px-2 rounded-md z-10 backdrop-blur-sm shadow-sm border border-white/10 w-fit shrink-0">
-                        <PiStarFill className="text-yellow-400 text-[0.7rem] sm:text-sm" />
-                        <p className="font-semibold tracking-wide">
-                          {(parseFloat(movie.rating) || 0).toFixed(1)}
-                        </p>
-                      </div>
+                    {/* Description/Caption */}
+                    {movie.description && (
+                      <p className="font-extralight line-clamp-2 w-[85%] text-xs sm:text-sm md:text-md text-white/70">
+                        📝 {movie.description}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-2 mt-2">
+                      <Link
+                        className="flex items-center gap-2 bg-white/10 border border-white/30 text-white text-sm py-1 px-5 rounded-full sm:text-base transition-all duration-300 ease-in-out hover:bg-white/20"
+                        to={movie.media_type === "tv" || movie.media_type === "tvshow" || movie.media_type === "series"
+                          ? `/ser/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}` 
+                          : `/mov/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}`}
+                        style={{ textDecoration: "none" }}
+                      >
+                        <FaPlay />
+                        Watch
+                      </Link>
                     </div>
                   </div>
                 </div>
