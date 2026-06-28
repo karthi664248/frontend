@@ -58,14 +58,41 @@ const MovieCard = ({ movie }) => {
         </div>
       </Link>
 
-      <div className="text-primaryTextColor mt-2">
-        <p className="line-clamp-1 text-md md:text-base ">{movie.title}</p>
-        <div className="flex items-center justify-between text-secondaryTextColor mt-1 uppercase text-[0.6rem] sm:text-xs md:text-sm">
-          {movie.release_year && <p>{movie.release_year}</p>}
-          <div className="uppercase bg-bgColorSecondary text-primaryTextColor py-1 px-3 rounded-full text-[0.5rem] sm:text-[0.6rem]">
-            <p>{movie.media_type}</p>
-          </div>
+      <div className="text-primaryTextColor mt-2 flex flex-col gap-1">
+        {/* Title */}
+        <p className="line-clamp-1 text-md md:text-base font-bold">{movie.title}</p>
+
+        {/* Year • Type • IMDB */}
+        <div className="flex items-center gap-1 flex-wrap text-secondaryTextColor text-[0.55rem] sm:text-[0.65rem]">
+          {movie.release_year && <span>📅 {movie.release_year}</span>}
+          <span className="text-white/30">•</span>
+          <span>{movie.media_type === "movie" ? "🎥 Movie" : "📺 Series"}</span>
+          {movie.rating && (
+            <>
+              <span className="text-white/30">•</span>
+              <span>⭐ {(parseFloat(movie.rating) || 0).toFixed(1)}</span>
+            </>
+          )}
         </div>
+
+        {/* Languages */}
+        {movie.languages && movie.languages.length > 0 && (
+          <p className="text-secondaryTextColor text-[0.55rem] sm:text-[0.65rem] line-clamp-1">
+            🌐 {movie.languages.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(", ")}
+          </p>
+        )}
+
+        {/* Genres */}
+        {movie.genres && movie.genres.length > 0 && (
+          <div className="flex items-center gap-1 flex-wrap">
+            <span className="text-[0.55rem]">🎭</span>
+            {movie.genres.slice(0, 3).map((g, i) => (
+              <span key={i} className="text-secondaryTextColor text-[0.5rem] sm:text-[0.6rem]">
+                #{g}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       {movie.rating ? (
