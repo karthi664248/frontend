@@ -75,34 +75,46 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                         {movie.title}
                       </h1>
                     )}
-                    <div className="hidden items-center gap-2 -mt-2 sm:flex">
+                    <div className="flex items-center gap-2 -mt-2 flex-wrap">
                       {movie.release_year && (
                         <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                          {movie.release_year}
+                          📅 {movie.release_year}
                         </p>
                       )}
                       <span>•</span>
                       <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                        {movie.languages
+                        🌐 {movie.languages
                           .map(
                             (lang) =>
                               lang.charAt(0).toUpperCase() + lang.slice(1)
-                          ) // Capitalize each language code
-                          .join("-")}{" "}
+                          )
+                          .join(", ")}{" "}
                       </p>
-                      <span>|</span>
-                      <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                        {movie.rip}
-                      </p>
+                      {movie.rip && (
+                        <>
+                          <span>•</span>
+                          <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                            🎬 {movie.rip}
+                          </p>
+                        </>
+                      )}
+                      {movie.rating && (
+                        <>
+                          <span>•</span>
+                          <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                            ⭐ {(parseFloat(movie.rating) || 0).toFixed(1)}
+                          </p>
+                        </>
+                      )}
                     </div>
-                    <div className="flex-col gap-3 text-sm text-bgColor hidden md:flex">
+                    <div className="flex-col gap-2 text-sm flex">
                       <div className="flex items-center gap-1 capitalize flex-wrap">
-                        {movie.genres.map((genreId, index) => (
+                        {movie.genres.slice(0, 3).map((genreId, index) => (
                           <div
-                            className="text-[0.6rem] py-0.5 px-2.5 bg-primaryBtn rounded-full sm:text-sm"
+                            className="text-[0.6rem] py-0.5 px-2.5 border border-white/30 text-white/80 rounded-full sm:text-sm"
                             key={index}
                           >
-                            {[genreId] || ""}
+                            {genreId}
                           </div>
                         ))}
                       </div>
@@ -116,7 +128,7 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                     <div className=" flex items-center gap-2 mt-2 ">
                       <div className="flex items-center gap-3 flex-wrap ">
                         <Link
-                          className="flex items-center gap-2 bg-primaryBtn text-bgColor text-sm py-1 px-5 rounded-full sm:text-base transition-all duration-300 ease-in-out hover:bg-primaryBtnHower hover:text-primaryTextColor"
+                          className="flex items-center gap-2 bg-white/10 border border-white/30 text-white text-sm py-1 px-5 rounded-full sm:text-base transition-all duration-300 ease-in-out hover:bg-white/20"
                           to={movie.media_type === "tv" || movie.media_type === "tvshow" || movie.media_type === "series"
                             ? `/ser/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}` 
                             : `/mov/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}`}
