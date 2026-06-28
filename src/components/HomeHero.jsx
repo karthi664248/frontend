@@ -23,7 +23,7 @@ const slugify = (text) => {
     .replace(/^-+|-+$/g, "");
 };
 
-export default function HeroSlider({ movieData, isMovieDataLoading }) {
+export default function HomeHero({ movieData, isMovieDataLoading }) {
   return (
     <div className="">
       {!isMovieDataLoading ? (
@@ -72,6 +72,7 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       )}
                     </div>
                     <div className="absolute bottom-4 left-4 right-0 sm:left-8 flex flex-col gap-1 xs:gap-2 text-secondaryTextColor w-[90%] md:w-2/3 lg:w-1/2 before:content-[''] before:absolute before:-inset-4 before:-left-4 before:sm:-left-8 before:-bottom-4 before:bg-white/40 dark:before:bg-transparent before:backdrop-blur-md dark:before:backdrop-blur-none before:z-[-1] before:mask">
+
                       {/* Title */}
                       {movie.title && (
                         <h1 className="line-clamp-1 w-[90%] text-xl sm:text-3xl md:text-4xl font-extrabold text-primaryTextColor">
@@ -112,10 +113,10 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       {movie.genres?.length > 0 && (
                         <div className="flex items-center gap-1 flex-wrap">
                           <span className="text-[0.6rem] lg:text-[0.7rem]">🎭</span>
-                          {movie.genres.slice(0, 3).map((genreId, index) => (
+                          {movie.genres.slice(0, 3).map((genreId, i) => (
                             <div
                               className="text-[0.6rem] py-0.5 px-2.5 border border-white/30 text-white/80 rounded-full sm:text-sm capitalize"
-                              key={index}
+                              key={i}
                             >
                               {genreId}
                             </div>
@@ -126,7 +127,7 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       {/* Languages */}
                       {movie.languages?.length > 0 && (
                         <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
-                          🌐 {movie.languages
+                          🌍 {movie.languages
                             .map((lang) => lang.charAt(0).toUpperCase() + lang.slice(1))
                             .join(", ")}
                         </p>
@@ -147,7 +148,7 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                           style={{ textDecoration: "none" }}
                         >
                           <FaPlay />
-                          Watch
+                          Watch Now
                         </Link>
                       </div>
                     </div>
