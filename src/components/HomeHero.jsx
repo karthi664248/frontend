@@ -88,7 +88,7 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       {index === 0 ? (
                         <img
                           src={movie.backdrop}
-                          className="h-full w-full object-cover object-center opacity-70"
+                          className="h-full w-full object-cover object-right opacity-95"
                           alt={movie.title}
                           fetchPriority="high"
                           loading="eager"
@@ -96,13 +96,13 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       ) : (
                         <LazyLoadImage
                           src={movie.backdrop}
-                          className="h-full w-full object-cover object-center opacity-70"
+                          className="h-full w-full object-cover object-right opacity-95"
                           effect="black-and-white"
                           alt={movie.title}
                         />
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/70 to-transparent" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/40 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/70 via-transparent to-transparent" />
                     </div>
 
                     {/* Content */}
