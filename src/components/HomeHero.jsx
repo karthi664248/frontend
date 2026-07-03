@@ -105,20 +105,6 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-transparent to-transparent" />
                     </div>
 
-                    {/* Curved accent shape */}
-                    <svg
-                      className="absolute bottom-0 left-0 w-full pointer-events-none"
-                      viewBox="0 0 736 120"
-                      preserveAspectRatio="none"
-                      style={{ height: "80px" }}
-                    >
-                      <path
-                        d="M0,90 C220,10 460,110 736,30 L736,120 L0,120 Z"
-                        fill={ACCENT_COLOR}
-                        opacity="0.85"
-                      />
-                    </svg>
-
                     {/* Content */}
                     <div className="relative z-10 flex h-full flex-col justify-center gap-2 xs:gap-3 p-4 sm:p-8 md:p-10 max-w-xl">
                       {movie.genres && movie.genres[0] && (
@@ -159,10 +145,12 @@ export default function HeroSlider({ movieData, isMovieDataLoading }) {
                       <Link
                         to={watchLink}
                         style={{ backgroundColor: ACCENT_COLOR, textDecoration: "none" }}
-                        className="mt-1 inline-flex w-fit items-center gap-2 rounded-full px-5 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+                        className="mt-1 relative inline-flex w-fit items-center rounded-full pl-5 pr-2 py-2 sm:pl-6 sm:pr-2.5 sm:py-2.5 text-sm sm:text-base font-semibold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
                       >
-                        <FaPlay />
-                        Watch Online
+                        <span className="mr-8 sm:mr-10">Watch Online</span>
+                        <span className="absolute right-1 sm:right-1.5 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-white text-black">
+                          <FaPlay className="ml-0.5 text-xs sm:text-sm" />
+                        </span>
                       </Link>
                     </div>
                   </section>
