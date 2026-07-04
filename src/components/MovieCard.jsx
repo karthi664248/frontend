@@ -8,10 +8,11 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/black-and-white.css";
-import { PiStarFill, PiPencilSimpleFill } from "react-icons/pi";
+import { PiStarFill, PiPencilSimpleFill, PiFilmSlateFill, PiTelevisionFill } from "react-icons/pi";
 
 import { BsPlayFill } from "react-icons/bs";
 import posterPlaceholder from "../assets/images/poster-placeholder.png";
+import { useSettings } from "../context/SettingsContext";
 
 const slugify = (text) => {
   if (!text) return "";
@@ -22,6 +23,7 @@ const slugify = (text) => {
 };
 
 const MovieCard = ({ movie }) => {
+  const { settings } = useSettings();
   const [showPlayBtn, setShowPlayBtn] = useState(false);
   const [openId, setOpenId] = useState();
 
@@ -58,41 +60,14 @@ const MovieCard = ({ movie }) => {
         </div>
       </Link>
 
-      <div className="text-primaryTextColor mt-2 flex flex-col gap-1">
-        {/* Title */}
-        <p className="line-clamp-1 text-md md:text-base font-bold">{movie.title}</p>
-
-        {/* Year • Type • IMDB */}
-        <div className="flex items-center gap-1 flex-wrap text-secondaryTextColor text-[0.55rem] sm:text-[0.65rem]">
-          {movie.release_year && <span>📅 {movie.release_year}</span>}
-          <span className="text-white/30">•</span>
-          <span>{movie.media_type === "movie" ? "🎥 Movie" : "📺 Series"}</span>
-          {movie.rating && (
-            <>
-              <span className="text-white/30">•</span>
-              <span>⭐ {(parseFloat(movie.rating) || 0).toFixed(1)}</span>
-            </>
-          )}
-        </div>
-
-        {/* Languages */}
-        {movie.languages && movie.languages.length > 0 && (
-          <p className="text-secondaryTextColor text-[0.55rem] sm:text-[0.65rem] line-clamp-1">
-            🌐 {movie.languages.map(l => l.charAt(0).toUpperCase() + l.slice(1)).join(", ")}
-          </p>
-        )}
-
-        {/* Genres */}
-        {movie.genres && movie.genres.length > 0 && (
-          <div className="flex items-center gap-1 flex-wrap">
-            <span className="text-[0.55rem]">🎭</span>
-            {movie.genres.slice(0, 3).map((g, i) => (
-              <span key={i} className="text-secondaryTextColor text-[0.5rem] sm:text-[0.6rem]">
-                #{g}
-              </span>
-            ))}
+      <div className="text-primaryTextColor mt-2">
+        <p className="line-clamp-1 text-md md:text-base ">{movie.title}</p>
+        <div className="flex items-center justify-between text-secondaryTextColor mt-1 uppercase text-[0.6rem] sm:text-xs md:text-sm">
+          {movie.release_year && <p>{movie.release_year}</p>}
+          <div className="uppercase bg-bgColorSecondary text-primaryTextColor py-1 px-3 rounded-full text-[0.5rem] sm:text-[0.6rem]">
+            <p>{movie.media_type}</p>
           </div>
-        )}
+        </div>
       </div>
 
       {movie.rating ? (
@@ -124,19 +99,14 @@ const MovieCard = ({ movie }) => {
       )}
 
 
-      {movie.languages && movie.languages.length > 0 ? (
-        <div className="flex items-center gap-1 absolute bottom-16 right-3 bg-primaryBtn text-bgColor py-1 px-3 rounded-full font-black text-[0.6rem] sm:text-xs shadow-lg">
-          <p>
-            {movie.languages.length > 3
-              ? movie.languages.slice(0, 2).map(lang => lang.charAt(0).toUpperCase() + lang.slice(1, 3)).join("-") + ` +${movie.languages.length - 2}`
-              : movie.languages.map(lang => lang.charAt(0).toUpperCase() + lang.slice(1, 3)).join("-")}
-          </p>
-        </div>
-      ) : (
-        <div className="flex items-center gap-1 absolute bottom-16 right-3 bg-primaryBtn text-bgColor py-1 px-3 rounded-full text-[0.6rem] sm:text-xs font-black shadow-lg">
-          <p>Multi</p>
-        </div>
-      )}
+      <div className="flex items-center gap-1 absolute bottom-16 right-3 bg-primaryBtn text-bgColor py-1 px-3 rounded-full font-black text-[0.6rem] sm:text-xs shadow-lg uppercase">
+        {movie.media_type === "movie" ? (
+          <PiFilmSlateFill className="text-[0.75rem] sm:text-sm" />
+        ) : (
+          <PiTelevisionFill className="text-[0.75rem] sm:text-sm" />
+        )}
+        <p>{movie.media_type === "movie" ? "Movie" : "Series"}</p>
+      </div>
 
       {movie.rip && movie.rip !== "Unknown" && (
         <div className="flex bg-bgColorSecondary rounded-full items-center gap-1 absolute bottom-16 left-3 text-primaryTextColor py-1 px-3 font-medium text-[0.6rem] sm:text-xs">
@@ -145,7 +115,7 @@ const MovieCard = ({ movie }) => {
       )}
 
       <AnimatePresence>
-        {openId === movie.tmdb_id && showPlayBtn && (
+        {settings.showCardPlayButton !== false && settings.showCardPlayButton !== "false" && openId === movie.tmdb_id && showPlayBtn && (
           <Link
             to={
               movie.media_type === "movie"
