@@ -1,154 +1,186 @@
-import React, { useState } from "react";
-import { Star, Play, ChevronLeft, ChevronRight } from "lucide-react";
+// ─────────────────────────────────────────────────────────────────────────────
+// Author  : ThiruXD
+// GitHub  : https://github.com/ThiruXD
+// Portfolio: https://thiruxd.is-a.dev
+// ─────────────────────────────────────────────────────────────────────────────
+import React from "react";
+import { Link } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Autoplay, Navigation, A11y } from "swiper/modules";
 
-// Same visual design as the updated HomeHero.jsx — sample data only,
-// so you can eyeball brightness / alignment / button style before
-// dropping the real file into the project.
+import "swiper/css";
+import "swiper/css/effect-creative";
+import "react-lazy-load-image-component/src/effects/black-and-white.css";
+import { BsArrowLeftCircle, BsArrowRightCircle } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
+import { PiStarFill } from "react-icons/pi";
 
-const ACCENT_COLOR = "#22c55e";
+const slugify = (text) => {
+  if (!text) return "";
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+};
 
-const SAMPLE_MOVIES = [
-  {
-    title: "Godzilla",
-    genre: "Action",
-    year: 2014,
-    languages: "English-Hindi-Tamil-Telugu",
-    rip: "Unknown",
-    rating: 3,
-    backdrop: "https://picsum.photos/seed/godzilla-kaiju/1200/500",
-  },
-  {
-    title: "Spy x Family",
-    genre: "Animation",
-    year: 2022,
-    languages: "English-Hindi-Jpn-Tamil-Telugu",
-    rip: "Unknown",
-    rating: 4,
-    backdrop: "https://picsum.photos/seed/spyfamily-anime/1200/500",
-  },
-  {
-    title: "The Witcher",
-    genre: "Drama",
-    year: 2019,
-    languages: "English",
-    rip: "Unknown",
-    rating: 4,
-    backdrop: "https://picsum.photos/seed/witcher-fantasy/1200/500",
-  },
-];
-
-function StarRating({ value = 0, max = 5 }) {
+export default function HeroSlider({ movieData, isMovieDataLoading }) {
   return (
-    <div className="flex flex-col gap-0.5">
-      <span className="text-[0.5rem] sm:text-[0.6rem] uppercase tracking-[0.15em] text-white/50">
-        Rating
-      </span>
-      <div className="flex items-center gap-0.5">
-        {Array.from({ length: max }).map((_, i) => (
-          <Star
-            key={i}
-            size={13}
-            className={i < value ? "fill-yellow-400 text-yellow-400" : "text-white/25"}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function HeroPreview() {
-  const [index, setIndex] = useState(0);
-  const movie = SAMPLE_MOVIES[index];
-
-  const next = () => setIndex((i) => (i + 1) % SAMPLE_MOVIES.length);
-  const prev = () => setIndex((i) => (i - 1 + SAMPLE_MOVIES.length) % SAMPLE_MOVIES.length);
-
-  return (
-    <div className="min-h-screen bg-neutral-900 flex flex-col items-center justify-center gap-6 p-6">
-      <section className="relative w-full max-w-3xl overflow-hidden rounded-2xl bg-neutral-950 text-white min-h-[380px] sm:min-h-[420px] md:h-96">
-        {/* Backdrop image */}
-        <div className="absolute inset-0">
-          <img
-            src={movie.backdrop}
-            className="h-full w-full object-cover object-right brightness-125 contrast-105 saturate-110"
-            alt={movie.title}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-neutral-950 via-neutral-950/15 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/40 via-transparent to-transparent" />
-        </div>
-
-        {/* Content */}
-        <div className="relative z-10 flex h-full flex-col justify-center gap-1.5 sm:gap-3 p-4 sm:p-8 md:p-10 max-w-xl overflow-hidden">
-          <span className="text-[0.6rem] sm:text-xs uppercase tracking-[0.2em] text-white/60">
-            {movie.genre}
-          </span>
-
-          <h1 className="text-lg sm:text-3xl md:text-4xl font-bold leading-tight break-words">
-            {movie.title}
-          </h1>
-
-          <div className="flex items-center gap-2">
-            <StarRating value={movie.rating} />
-            <span className="text-[0.65rem] sm:text-xs text-white/70 font-semibold">
-              {movie.rating.toFixed(1)}
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.6rem] sm:text-xs md:text-sm text-white/60 pr-2">
-            <span>{movie.year}</span>
-            <span>•</span>
-            <span className="break-words">{movie.languages}</span>
-            <span>|</span>
-            <span>{movie.rip}</span>
-          </div>
-
-          <button
-            style={{
-              backgroundColor: ACCENT_COLOR,
-              boxShadow: `0 0 14px 2px ${ACCENT_COLOR}99, 0 0 32px 6px ${ACCENT_COLOR}55`,
-            }}
-            className="mt-1 relative inline-flex w-fit items-center rounded-full pl-4 pr-1.5 py-1.5 sm:pl-5 sm:pr-2 sm:py-2 text-xs sm:text-sm font-bold text-white transition-all hover:scale-105 hover:brightness-110 active:scale-95 animate-pulse-glow"
-          >
-            <span className="mr-6 sm:mr-8">Watch Online</span>
-            <span className="absolute right-1 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-white text-black">
-              <Play size={11} className="ml-0.5 fill-current" />
-            </span>
-          </button>
-        </div>
-      </section>
-
-      {/* Sample switcher — not part of the real component, just for previewing */}
-      <div className="flex items-center gap-4">
-        <button
-          onClick={prev}
-          className="h-9 w-9 flex items-center justify-center rounded-full bg-neutral-800 text-white hover:bg-neutral-700"
-        >
-          <ChevronLeft size={18} />
-        </button>
-        <span className="text-white/60 text-sm">
-          {index + 1} / {SAMPLE_MOVIES.length} sample slides
-        </span>
-        <button
-          onClick={next}
-          className="h-9 w-9 flex items-center justify-center rounded-full bg-neutral-800 text-white hover:bg-neutral-700"
-        >
-          <ChevronRight size={18} />
-        </button>
-      </div>
-
+    <div className="">
       <style>{`
-        @keyframes pulseGlow {
+        @keyframes heroWatchGlow {
           0%, 100% {
-            box-shadow: 0 0 14px 2px ${ACCENT_COLOR}99, 0 0 32px 6px ${ACCENT_COLOR}55;
+            box-shadow: 0 0 10px 1px color-mix(in srgb, var(--color-primary) 65%, transparent),
+                        0 0 22px 4px color-mix(in srgb, var(--color-primary) 35%, transparent);
           }
           50% {
-            box-shadow: 0 0 20px 4px ${ACCENT_COLOR}cc, 0 0 44px 10px ${ACCENT_COLOR}80;
+            box-shadow: 0 0 16px 3px color-mix(in srgb, var(--color-primary) 85%, transparent),
+                        0 0 32px 8px color-mix(in srgb, var(--color-primary) 55%, transparent);
           }
         }
-        .animate-pulse-glow {
-          animation: pulseGlow 2s ease-in-out infinite;
+        .animate-heroGlow {
+          animation: heroWatchGlow 2s ease-in-out infinite;
         }
       `}</style>
+      {!isMovieDataLoading ? (
+        <>
+          <Swiper
+            modules={[Autoplay, Navigation, A11y]}
+            grabCursor={true}
+            lazy="true"
+            loop={true}
+            navigation={{
+              prevEl: ".heroSlidePrev",
+              nextEl: ".heroSlideNext",
+            }}
+            autoplay={{
+              delay: 5000,
+              disableOnInteraction: false,
+              pauseOnMouseEnter: true,
+            }}
+            spaceBetween={30}
+            keyboard={{
+              enabled: true,
+            }}
+          >
+            {movieData.map((movie, index) => (
+              <SwiperSlide key={index}>
+                <div className="relative">
+                  <div className="rounded-t-2xl aspect-video md:h-96 mask md:aspect-auto">
+                    {index === 0 ? (
+                      <img
+                        src={movie.backdrop}
+                        className="rounded-t-2xl w-full h-full object-cover brightness-125 contrast-105 saturate-110"
+                        alt={movie.title}
+                        fetchPriority="high"
+                        loading="eager"
+                      />
+                    ) : (
+                      <LazyLoadImage
+                        src={movie.backdrop}
+                        className="rounded-t-2xl w-full h-full object-cover brightness-125 contrast-105 saturate-110"
+                        effect="black-and-white"
+                        alt={movie.title}
+                      />
+                    )}
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-0 sm:left-8 flex flex-col gap-1 xs:gap-2 text-secondaryTextColor w-[90%] md:w-2/3 lg:w-1/2 before:content-[''] before:absolute before:-inset-4 before:-left-4 before:sm:-left-8 before:-bottom-4 before:bg-white/40 dark:before:bg-transparent before:backdrop-blur-md dark:before:backdrop-blur-none before:z-[-1] before:mask">
+                    {movie.title && (
+                      <h1 className="line-clamp-1 w-[90%] text-xl sm:text-3xl md:text-4xl font-extrabold text-primaryTextColor">
+                        {movie.title}
+                      </h1>
+                    )}
+                    <div className="hidden items-center gap-2 -mt-2 sm:flex">
+                      {movie.release_year && (
+                        <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                          {movie.release_year}
+                        </p>
+                      )}
+                      <span>•</span>
+                      <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                        {movie.languages
+                          .map(
+                            (lang) =>
+                              lang.charAt(0).toUpperCase() + lang.slice(1)
+                          ) // Capitalize each language code
+                          .join("-")}{" "}
+                      </p>
+                      <span>|</span>
+                      <p className="text-[0.6rem] lg:text-[0.7rem] xl:text-[0.9rem]">
+                        {movie.rip}
+                      </p>
+                    </div>
+                    <div className="flex-col gap-3 text-sm text-bgColor hidden md:flex">
+                      <div className="flex items-center gap-1 capitalize flex-wrap">
+                        {movie.genres.map((genreId, index) => (
+                          <div
+                            className="text-[0.6rem] py-0.5 px-2.5 bg-primaryBtn rounded-full sm:text-sm"
+                            key={index}
+                          >
+                            {[genreId] || ""}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {movie.description && (
+                      <p className="font-extralight line-clamp-1 w-[80%] text-xs sm:line-clamp-2 sm:text-sm md:text-md">
+                        {movie.description}
+                      </p>
+                    )}
+                    <div className=" flex items-center gap-2 mt-2 ">
+                      <div className="flex items-center gap-3 flex-wrap ">
+                        <Link
+                          className="animate-heroGlow flex items-center gap-2 bg-primaryBtn text-bgColor font-bold text-sm py-1 px-5 rounded-full sm:text-base transition-all duration-300 ease-in-out hover:bg-primaryBtnHower hover:text-primaryTextColor hover:scale-105"
+                          to={movie.media_type === "tv" || movie.media_type === "tvshow" || movie.media_type === "series"
+                            ? `/ser/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}` 
+                            : `/mov/${movie.tmdb_id}/${movie.slug || slugify(movie.title)}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <FaPlay />
+                          Watch
+                        </Link>
+                      </div>
+
+                      {/* Mobile rating */}
+                      <div className="flex flex-col items-start gap-0.5 bg-black/60 text-white text-[0.65rem] sm:text-xs py-1 px-2 rounded-md z-10 backdrop-blur-sm shadow-sm border border-white/10 w-fit shrink-0">
+                        <span className="text-[0.45rem] sm:text-[0.55rem] uppercase tracking-[0.15em] text-white/50 leading-none">
+                          Rating
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <PiStarFill className="text-yellow-400 text-[0.7rem] sm:text-sm" />
+                          <p className="font-semibold tracking-wide">
+                            {(parseFloat(movie.rating) || 0).toFixed(1)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className="flex items-center gap-3 mt-5 pl-4 sm:pl-8">
+            <BsArrowLeftCircle className="heroSlidePrev text-[2.4rem] text-secondaryTextColor p-2 cursor-pointer rounded-full transition-all duration-300 ease-in-out hover:bg-bgColorSecondary hover:text-primaryTextColor " />
+            <BsArrowRightCircle className="heroSlideNext text-[2.4rem] text-secondaryTextColor p-2 cursor-pointer rounded-full transition-all duration-300 ease-in-out hover:bg-bgColorSecondary hover:text-primaryTextColor" />
+          </div>
+        </>
+      ) : (
+        <div className="relative animate-pulse">
+          <div className="bg-bgColorSecondary rounded-2xl aspect-video md:h-96 md:aspect-auto w-full relative overflow-hidden">
+            <div className="absolute bottom-4 left-4 right-0 sm:left-8 flex flex-col gap-2 w-[90%] md:w-2/3 lg:w-1/2">
+              <div className="h-7 sm:h-9 bg-bgColor/50 rounded-full w-2/3"></div>
+              <div className="hidden sm:flex gap-2 items-center mt-1">
+                <div className="h-3 bg-bgColor/50 rounded-full w-12"></div>
+                <div className="h-3 bg-bgColor/50 rounded-full w-20"></div>
+              </div>
+              <div className="h-4 bg-bgColor/50 rounded-full w-4/5 mt-1 sm:mt-2"></div>
+              <div className="h-4 bg-bgColor/50 rounded-full w-1/2 mt-1"></div>
+              <div className="h-8 bg-bgColor/50 rounded-full w-28 mt-3"></div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
