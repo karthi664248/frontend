@@ -136,8 +136,8 @@ const MovieCard = ({ movie }) => {
       )}
 
       {movie.rip && movie.rip !== "Unknown" && (
-        <div className="flex items-center gap-1 absolute bottom-24 left-3 bg-black/70 text-white py-1 px-2.5 rounded-md z-10 backdrop-blur-sm shadow-sm border border-white/10 font-semibold tracking-wide text-[0.6rem] sm:text-xs">
-          <p>{movie.rip}</p>
+        <div className="flex items-center gap-1 absolute bottom-24 left-3 bg-black/40 text-white py-1 px-2.5 rounded-md z-10 backdrop-blur-sm shadow-sm border border-white/10 font-semibold tracking-wide text-[0.6rem] sm:text-xs">
+          <p>📀 {movie.rip}</p>
         </div>
       )}
 
