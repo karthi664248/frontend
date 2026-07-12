@@ -10,6 +10,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { PiStarFill, PiStarBold, PiPencilSimpleBold, PiTrashBold } from "react-icons/pi";
+import { useSettings } from "../context/SettingsContext";
 
 const BASE = import.meta.env.VITE_BASE_URL;
 
@@ -38,6 +39,7 @@ const StarPicker = ({ value, onChange }) => (
 );
 
 const ReviewsSection = ({ movieData, mediaType }) => {
+  const { settings } = useSettings();
   const ownerId = getDeviceId();
   const tmdbId = movieData?.tmdb_id;
   const resolvedMediaType = mediaType || (movieData?.seasons ? "tv" : "movie");
@@ -129,6 +131,8 @@ const ReviewsSection = ({ movieData, mediaType }) => {
       toast.error("Couldn't remove your review.");
     }
   };
+
+  if (settings?.showRatingsReviews === false) return null;
 
   return (
     <div className="mt-8 bg-btnColor/40 p-4 md:p-8 rounded-3xl text-primaryTextColor">
@@ -242,4 +246,4 @@ const ReviewsSection = ({ movieData, mediaType }) => {
 };
 
 export default ReviewsSection;
-    
+        
